@@ -1,0 +1,132 @@
+\documentclass[12pt]{beamer}
+
+\usetheme{Madrid}
+%\usecolortheme{seahorse}
+\usepackage[spanish]{babel}
+\usepackage[latin1]{inputenc}
+
+
+\title{Experiencia Uso de {\fontfamily{phv}\selectfont R} para Análsis Espacial}
+\author{Francisco Zambrano}
+
+%\date{September 6th 2006}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Introducción}
+\begin{itemize}[<+->]
+\item La información espacial se encuentra en todas partes.
+\item Por mas de 10 años hubo una creciente contribución de paquetes para manejar y analizar información espacial.
+\item 2005: Un grupo de desarrolladores de R crearon el paquete 'sp' para extender R con metodos y clases para análisis espacial.
+\item Applied Spatial Data Analysis with R: Roger Bivand, Edzer Pebesma and Virgilio Gómez-Rubio.
+\end{itemize}
+\pause
+\begin{center}
+\includegraphics[width=2.5cm]{imagenes/libro_spatial.jpg}
+\end{center}
+\end{frame}
+
+\begin{frame}{Introducción}
+\includegraphics[width=\textwidth]{imagenes/red_sp.png}
+\end{frame}
+
+
+\begin{frame}[fragile]{Ejemplo sp}
+<<echo=FALSE,results='hide'>>=
+# some setup
+options(width=60) # make the printing fit on the page
+set.seed(1121) # make the results repeatable
+@
+
+<<size='scriptsize',prompt=TRUE,message=FALSE>>=
+require(sp)
+data(meuse)
+str(meuse)
+@
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo Uso sp}
+<<echo=FALSE,results='hide'>>=
+# some setup
+options(width=60) # make the printing fit on the page
+@
+
+<<echo=TRUE,prompt=TRUE,message=FALSE,size='tiny',tidy=TRUE,width='\\textwidth'>>=
+coordinates(meuse) <- ~x+y
+str(meuse)
+@
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo Uso sp}
+<<echo=TRUE,prompt=TRUE,size='scriptsize',tidy=TRUE>>=
+crs = CRS("+init=epsg:28992 +proj=sterea +lat_0=52.15616055555555 
+          +lon_0=5.38763888888889 +k=0.9999079 
+          +x_0=155000 +y_0=463000 +ellps=bessel 
+          +towgs84=565.417,50.3319,465.552,-0.398957,0.343988,-1.8774,4.0725 
+          +units=m +no_defs")
+proj4string(meuse) <- crs
+library(lattice)
+trellis.par.set(sp.theme()) # sets bpy.colors() ramp
+l2 = list("SpatialPolygonsRescale", layout.north.arrow(), offset = c(181300,329800), 
+  scale = 400)
+l3 = list("SpatialPolygonsRescale", layout.scale.bar(), offset = c(180500,329800), 
+	scale = 500, fill=c("transparent","black"))
+l4 = list("sp.text", c(180500,329900), "0")
+l5 = list("sp.text", c(181000,329900), "500 m")
+@
+\end{frame}
+
+\begin{frame}[fragile]{Ejemplo sp}
+<<size='tiny',fig.align='center',fig.pos='!ht',out.width='0.65\\linewidth'>>=
+spplot(meuse, c("zinc", "lead"), sp.layout=list(l2,l3,l4,l5, which = 2),
+  key.space=list(x=0.1,y=.95,corner=c(0,1)))
+@
+\end{frame}
+
+
+\begin{frame}[fragile]{Paquete raster}
+<<setup,size='tiny',prompt=TRUE,message=FALSE,echo=TRUE,eval=TRUE>>=
+library(raster)
+x<-stack(paste('raster/',list.files('raster'),sep='')[1:6])
+summary(x)
+@
+\end{frame}
+
+\begin{frame}[fragile]{Paquete raster}
+<<eval=TRUE,out.width='\\linewidth',out.height='0.7\\textheight'>>=
+plot(x)
+@
+\end{frame}
+
+\begin{frame}[fragile]{Función calc}
+<<eval=TRUE,size='tiny',out.width='\\linewidth',out.height='0.7\\textheight'>>=
+result<-calc(x,function(x)fivenum(x))
+plot(result)
+@
+\end{frame}
+
+\begin{frame}{Para que se esta utilizando el paquete raster}
+\begin{itemize}[<+->]
+\item Se estan procesando imágenes de todo Chile entre 2000-2012 (MODIS)
+\item La superficie total de chile corresponde a 12 MM de pixeles para una resolución de 250m
+\item Se utilizan 300 imagenes aprox, frecuencia de 16 dias
+\item Se realiza un suavizado para cada pixel para la serie temporal.
+\item Se calculan los resumen estadistico (fivenum,boxplot.stats,etc) para la serie completa.
+\item Se calcula diferentes indices vegetacionales.
+\item ...
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Datos de Utilidad}
+\begin{enumerate}
+\item Pebesma, E.J., 2004. Multivariable geostatistics in S: the gstat package. Computers & Geosciences, 30: 683-691.
+\item Hengl, Tomislav. 2009. A practical guide to geostatistical mapping. \url{spatial-analyst.net}
+\item Grupo de correo [R-SIG-GEO]
+\end{enumerate}
+\end{frame}
+
+\end{document}

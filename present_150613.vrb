@@ -1,0 +1,11 @@
+\frametitle {Función calc}\begin {knitrout}\tiny
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+result <- \hlfunctioncall{calc}(x, \hlfunctioncall{function}(x) \hlfunctioncall{fivenum}(x))
+\hlfunctioncall{plot}(result)
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\linewidth,height=0.7\textheight]{figure/unnamed-chunk-8}
+
+\end{knitrout}
+
