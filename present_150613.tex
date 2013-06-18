@@ -61,9 +61,9 @@
 
 
 \title{Experiencia Uso de {\fontfamily{phv}\selectfont R} para Análsis Espacial}
-\author{Francisco Zambrano}
+\author{Francisco Zambrano Bigiarini}
 
-%\date{September 6th 2006}
+\date{\today}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 
 \begin{document}
@@ -90,10 +90,8 @@
 \end{frame}
 
 
-\begin{frame}[fragile]{Ejemplo sp}
-
-
-
+\begin{frame}[fragile]{Manejo de Información Espacial con \textbf{sp}}
+Data frame con información espacial: coordenadas geográficas (x, y) y variables con distintos parametros (cadmio, cobre, plomo, etc)
 \begin{knitrout}\scriptsize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -123,10 +121,9 @@
 
 \end{frame}
 
-\begin{frame}[fragile]{Ejemplo Uso sp}
-
-
-
+\begin{frame}[fragile]{Manejo de Información Espacial con \textbf{sp}}
+El data frame puede transformarce a información espacial con la función \textbf{coordinates}.
+El data frame pasa a ser ahora un 'SpatialPointsDataFrame' con una estructura diferente.
 \begin{knitrout}\tiny
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -165,7 +162,9 @@
 
 \end{frame}
 
-\begin{frame}[fragile]{Ejemplo Uso sp}
+\begin{frame}[fragile]{Manejo de Información Espacial con \textbf{sp}}
+Utilizando \textbf{'CRS'} para definir la projección de la información espacial y \textbf{'proj4string'} para asignar 
+la projección a \textbf{'meuse'}
 \begin{knitrout}\scriptsize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -175,8 +174,8 @@
 > \hlfunctioncall{trellis.par.set}(\hlfunctioncall{sp.theme}())  \hlcomment{# sets \hlfunctioncall{bpy.colors}() ramp}
 > l2 = \hlfunctioncall{list}(\hlstring{"SpatialPolygonsRescale"}, \hlfunctioncall{layout.north.arrow}(), offset = \hlfunctioncall{c}(181300, 
 +     329800), scale = 400)
-> l3 = \hlfunctioncall{list}(\hlstring{"SpatialPolygonsRescale"}, \hlfunctioncall{layout.scale.bar}(), offset = \hlfunctioncall{c}(180500, 
-+     329800), scale = 500, fill = \hlfunctioncall{c}(\hlstring{"transparent"}, \hlstring{"black"}))
+> l3 = \hlfunctioncall{list}(\hlstring{"SpatialPolygonsRescale"}, \hlfunctioncall{layout.scale.bar}(), offset = \hlfunctioncall{c}(180500, 329800), 
++     scale = 500, fill = \hlfunctioncall{c}(\hlstring{"transparent"}, \hlstring{"black"}))
 > l4 = \hlfunctioncall{list}(\hlstring{"sp.text"}, \hlfunctioncall{c}(180500, 329900), \hlstring{"0"})
 > l5 = \hlfunctioncall{list}(\hlstring{"sp.text"}, \hlfunctioncall{c}(181000, 329900), \hlstring{"500 m"})
 \end{alltt}
@@ -185,17 +184,17 @@
 
 \end{frame}
 
-\begin{frame}[fragile]{Ejemplo sp}
+\begin{frame}[fragile]{Manejo de Información Espacial con \textbf{sp}}
+Un simple gráfico de la información espacial para las concentraciones de \textbf{'zinc'} y \textbf{'plomo'} con la función \textbf{'spplot'}
 \begin{knitrout}\tiny
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlfunctioncall{spplot}(meuse, \hlfunctioncall{c}(\hlstring{"zinc"}, \hlstring{"lead"}), sp.layout = \hlfunctioncall{list}(l2, l3, l4, 
-    l5, which = 2), key.space = \hlfunctioncall{list}(x = 0.1, y = 0.95, corner = \hlfunctioncall{c}(0, 
-    1)))
+\hlfunctioncall{spplot}(meuse, \hlfunctioncall{c}(\hlstring{"zinc"}, \hlstring{"lead"}), sp.layout = \hlfunctioncall{list}(l2, l3, l4, l5, which = 2), 
+    key.space = \hlfunctioncall{list}(x = 0.1, y = 0.95, corner = \hlfunctioncall{c}(0, 1)))
 \end{alltt}
 \end{kframe}
 
-{\centering \includegraphics[width=0.65\linewidth]{figure/unnamed-chunk-6} 
+{\centering \includegraphics[width=0.65\linewidth]{figure/unnamed-chunk-4} 
 
 }
 
@@ -206,7 +205,8 @@
 \end{frame}
 
 
-\begin{frame}[fragile]{Paquete raster}
+\begin{frame}[fragile]{Algo con el paquete \textbf{'raster'}}
+Cargando seis imágenes en la variable 'x', como objeto \textbf{'RasterStack'}
 \begin{knitrout}\tiny
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -242,20 +242,22 @@
 
 \end{frame}
 
-\begin{frame}[fragile]{Paquete raster}
+\begin{frame}[fragile]{Algo con el paquete \textbf{'raster'}}
+Utilizando el método plot para un objeto de clase \textbf{'RasterStack'}
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlfunctioncall{plot}(x)
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\linewidth,height=0.7\textheight]{figure/unnamed-chunk-7} 
+\includegraphics[width=\linewidth,height=0.7\textheight]{figure/unnamed-chunk-5} 
 
 \end{knitrout}
 
 \end{frame}
 
-\begin{frame}[fragile]{Función calc}
+\begin{frame}[fragile]{Algo con el paquete \textbf{'raster'}}
+Función 'fivenum' aplicada a traves de la función 'calc' del paquete raster
 \begin{knitrout}\tiny
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -263,20 +265,21 @@ result <- \hlfunctioncall{calc}(x, \hlfunctioncall{function}(x) \hlfunctioncall{
 \hlfunctioncall{plot}(result)
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\linewidth,height=0.7\textheight]{figure/unnamed-chunk-8} 
+\includegraphics[width=\linewidth,height=0.7\textheight]{figure/unnamed-chunk-6} 
 
 \end{knitrout}
 
 \end{frame}
 
-\begin{frame}{Para que se esta utilizando el paquete raster}
+\begin{frame}{De que me ha servido el uso de información espacial y raster en 'R'}
 \begin{itemize}[<+->]
-\item Se estan procesando imágenes de todo Chile entre 2000-2012 (MODIS)
+\item Dejar de utilizar software de pago como: ArcGis, Envi, Erdas, etc.
+\item Procesar imágenes MODIS de todo Chile entre 2000-2012.
 \item La superficie total de chile corresponde a 12 MM de pixeles para una resolución de 250m
 \item Se utilizan 300 imagenes aprox, frecuencia de 16 dias
-\item Se realiza un suavizado para cada pixel para la serie temporal.
+\item Se realiza un suavizado para cada pixel para la serie temporal ('lowess' o 'loess').
 \item Se calculan los resumen estadistico (fivenum,boxplot.stats,etc) para la serie completa.
-\item Se calcula diferentes indices vegetacionales.
+\item Se calcula diferentes indices vegetacionales y de sequía
 \item ...
 \end{itemize}
 \end{frame}
@@ -286,6 +289,7 @@ result <- \hlfunctioncall{calc}(x, \hlfunctioncall{function}(x) \hlfunctioncall{
 \item Pebesma, E.J., 2004. Multivariable geostatistics in S: the gstat package. Computers & Geosciences, 30: 683-691.
 \item Hengl, Tomislav. 2009. A practical guide to geostatistical mapping. \url{spatial-analyst.net}
 \item Grupo de correo [R-SIG-GEO]
+\item Algunos paquetes interesantes: maptools, rgdal, rasterVIS, plotKML, gstat, MODIS.
 \end{enumerate}
 \end{frame}
 

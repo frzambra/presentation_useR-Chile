@@ -7,9 +7,9 @@
 
 
 \title{Experiencia Uso de {\fontfamily{phv}\selectfont R} para Análsis Espacial}
-\author{Francisco Zambrano}
+\author{Francisco Zambrano Bigiarini}
 
-%\date{September 6th 2006}
+\date{\today}
 
 \begin{document}
 
@@ -35,13 +35,8 @@
 \end{frame}
 
 
-\begin{frame}[fragile]{Ejemplo sp}
-<<echo=FALSE,results='hide'>>=
-# some setup
-options(width=60) # make the printing fit on the page
-set.seed(1121) # make the results repeatable
-@
-
+\begin{frame}[fragile]{Manejo de Información Espacial con \textbf{sp}}
+Data frame con información espacial: coordenadas geográficas (x, y) y variables con distintos parametros (cadmio, cobre, plomo, etc)
 <<size='scriptsize',prompt=TRUE,message=FALSE>>=
 require(sp)
 data(meuse)
@@ -49,19 +44,18 @@ str(meuse)
 @
 \end{frame}
 
-\begin{frame}[fragile]{Ejemplo Uso sp}
-<<echo=FALSE,results='hide'>>=
-# some setup
-options(width=60) # make the printing fit on the page
-@
-
+\begin{frame}[fragile]{Manejo de Información Espacial con \textbf{sp}}
+El data frame puede transformarce a información espacial con la función \textbf{coordinates}.
+El data frame pasa a ser ahora un 'SpatialPointsDataFrame' con una estructura diferente.
 <<echo=TRUE,prompt=TRUE,message=FALSE,size='tiny',tidy=TRUE,width='\\textwidth'>>=
 coordinates(meuse) <- ~x+y
 str(meuse)
 @
 \end{frame}
 
-\begin{frame}[fragile]{Ejemplo Uso sp}
+\begin{frame}[fragile]{Manejo de Información Espacial con \textbf{sp}}
+Utilizando \textbf{'CRS'} para definir la projección de la información espacial y \textbf{'proj4string'} para asignar 
+la projección a \textbf{'meuse'}
 <<echo=TRUE,prompt=TRUE,size='scriptsize',tidy=TRUE>>=
 crs = CRS("+init=epsg:28992 +proj=sterea +lat_0=52.15616055555555 
           +lon_0=5.38763888888889 +k=0.9999079 
@@ -80,7 +74,8 @@ l5 = list("sp.text", c(181000,329900), "500 m")
 @
 \end{frame}
 
-\begin{frame}[fragile]{Ejemplo sp}
+\begin{frame}[fragile]{Manejo de Información Espacial con \textbf{sp}}
+Un simple gráfico de la información espacial para las concentraciones de \textbf{'zinc'} y \textbf{'plomo'} con la función \textbf{'spplot'}
 <<size='tiny',fig.align='center',fig.pos='!ht',out.width='0.65\\linewidth'>>=
 spplot(meuse, c("zinc", "lead"), sp.layout=list(l2,l3,l4,l5, which = 2),
   key.space=list(x=0.1,y=.95,corner=c(0,1)))
@@ -88,7 +83,8 @@ spplot(meuse, c("zinc", "lead"), sp.layout=list(l2,l3,l4,l5, which = 2),
 \end{frame}
 
 
-\begin{frame}[fragile]{Paquete raster}
+\begin{frame}[fragile]{Algo con el paquete \textbf{'raster'}}
+Cargando seis imágenes en la variable 'x', como objeto \textbf{'RasterStack'}
 <<setup,size='tiny',prompt=TRUE,message=FALSE,echo=TRUE,eval=TRUE>>=
 library(raster)
 x<-stack(paste('raster/',list.files('raster'),sep='')[1:6])
@@ -96,27 +92,30 @@ summary(x)
 @
 \end{frame}
 
-\begin{frame}[fragile]{Paquete raster}
+\begin{frame}[fragile]{Algo con el paquete \textbf{'raster'}}
+Utilizando el método plot para un objeto de clase \textbf{'RasterStack'}
 <<eval=TRUE,out.width='\\linewidth',out.height='0.7\\textheight'>>=
 plot(x)
 @
 \end{frame}
 
-\begin{frame}[fragile]{Función calc}
+\begin{frame}[fragile]{Algo con el paquete \textbf{'raster'}}
+Función 'fivenum' aplicada a traves de la función 'calc' del paquete raster
 <<eval=TRUE,size='tiny',out.width='\\linewidth',out.height='0.7\\textheight'>>=
 result<-calc(x,function(x)fivenum(x))
 plot(result)
 @
 \end{frame}
 
-\begin{frame}{Para que se esta utilizando el paquete raster}
+\begin{frame}{De que me ha servido el uso de información espacial y raster en 'R'}
 \begin{itemize}[<+->]
-\item Se estan procesando imágenes de todo Chile entre 2000-2012 (MODIS)
+\item Dejar de utilizar software de pago como: ArcGis, Envi, Erdas, etc.
+\item Procesar imágenes MODIS de todo Chile entre 2000-2012.
 \item La superficie total de chile corresponde a 12 MM de pixeles para una resolución de 250m
 \item Se utilizan 300 imagenes aprox, frecuencia de 16 dias
-\item Se realiza un suavizado para cada pixel para la serie temporal.
+\item Se realiza un suavizado para cada pixel para la serie temporal ('lowess' o 'loess').
 \item Se calculan los resumen estadistico (fivenum,boxplot.stats,etc) para la serie completa.
-\item Se calcula diferentes indices vegetacionales.
+\item Se calcula diferentes indices vegetacionales y de sequía
 \item ...
 \end{itemize}
 \end{frame}
@@ -126,6 +125,7 @@ plot(result)
 \item Pebesma, E.J., 2004. Multivariable geostatistics in S: the gstat package. Computers & Geosciences, 30: 683-691.
 \item Hengl, Tomislav. 2009. A practical guide to geostatistical mapping. \url{spatial-analyst.net}
 \item Grupo de correo [R-SIG-GEO]
+\item Algunos paquetes interesantes: maptools, rgdal, rasterVIS, plotKML, gstat, MODIS.
 \end{enumerate}
 \end{frame}
 
